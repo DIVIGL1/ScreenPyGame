@@ -7,21 +7,48 @@ import math
 
 SCREEN_DIM = (800, 600)
 
-class Vec2d():
-    def __add__(self, v1, v2):
-        pass
-     
-    def __sub__(self, v1, v2):
-        pass
-    
-    def __mul__(self, v1, v2):
-        pass
-    
-    def len(self, v1):
-        pass
+class Vec2d(object):
+    def __init__(self, x_coordinate, y_coordinate):
+        # Initiates vector with (x,y) coordinates.
+        self.x, self.y = x_coordinate, y_coordinate
+
+    def __add__(self, add_vector):
+        # Creates new vector using this and new one.
+        return (Vec2d(self.x + add_vector.x, self.y + add_vector.y))
+
+    def __sub__(self, add_vector):
+        # Creates new vector using this and new one.
+        return (Vec2d(self.x - add_vector.x, self.y - add_vector.y))
+
+    def __mul__(self, k):
+        # Creates new vector using this multyplayed with n.
+        return (Vec2d(self.x * k, self.y * k))
+
+    def len(self):
+        # Returns it's own length.
+        return (math.sqrt(self.x**2 + self.y**2))
 
     def int_pair(self):
+        # Returns tuple of it's own coordinates.
+        return (self.x, self.y)
+
+class Polyline(object):
+    def __init__(self, screen_dim=(800, 600)):
+        self.points = []
+        self.speeds = []
+
+    def add_point(self, point, speed):
+        self.points = self.points + point
+        self.speeds = self.speeds + speed
+
+    def set_points(self):
         pass
+
+    def draw_points(self, points, style="points", width=3, color=(255, 255, 255)):
+        pass
+
+
+
 
 # =======================================================================================
 # Функции для работы с векторами
