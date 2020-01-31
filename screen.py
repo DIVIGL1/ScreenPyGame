@@ -36,18 +36,47 @@ class Polyline(object):
     def __init__(self, screen_dim=(800, 600)):
         self.points = []
         self.speeds = []
+        self.screen_dim = screen_dim
 
     def add_point(self, point, speed):
+        # Adds points to the list.
         self.points = self.points + point
         self.speeds = self.speeds + speed
 
     def set_points(self):
-        pass
+        # Recalculates coordinates of points.
+        for p in range(len(self.points)):
+            self.points[p] = self.points[p] + self.speeds[p]
+            if self.points[p][0] > self.screen_dim[0] or self.points[p][0] < 0:
+                self.speeds[p] = (- self.speeds[p][0], self.speeds[p][1])
+            if self.points[p][1] > self.screen_dim[1] or self.points[p][1] < 0:
+                self.speeds[p] = (self.speeds[p][0], -self.speeds[p][1])
 
     def draw_points(self, points, style="points", width=3, color=(255, 255, 255)):
-        pass
+        # Draw points on a screen.
+        if style == "line":
+            for p_n in range(-1, len(self.points) - 1):
+                pygame.draw.line(gameDisplay, color,
+                                (int(self.points[p_n][0]), int(self.points[p_n][1])),
+                                (int(self.points[p_n + 1][0]), int(self.points[p_n + 1][1])), width)
 
+        elif style == "points":
+            for p in self.points:
+                pygame.draw.circle(gameDisplay, color, (int(p[0]), int(p[1])), width)
 
+class Knot(Polyline):
+    def get_knot(self, points, count):
+        if len(self.points) < 3:
+            return []
+        res = []
+        for i in range(-2, len(self.points) - 2):
+            ptn = []
+            ptn.append(mul(add(self.points[i], self.points[i + 1]), 0.5))
+            ptn.append(self.points[i + 1])
+            ptn.append(mul(add(self.points[i + 1], self.points[i + 2]), 0.5))
+
+            res.extend(get_points(ptn, count))
+        return res
 
 
 # =======================================================================================
